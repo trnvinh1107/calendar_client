@@ -1,38 +1,48 @@
 // src/components/RegisterForm.js
-import React, { useState } from 'react';
-import axios from 'axios';  // Import Redirect for navigation
-import { Link } from 'react-router-dom'; // Import Link for navigation
+import React, { useState } from "react";
+import axios from "axios"; // Import Redirect for navigation
+import { Link } from "react-router-dom"; // Import Link for navigation
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    userName: '',
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    userName: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
 
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    if (
+      !formData.userName ||
+      formData.firstName ||
+      formData.lastName ||
+      formData.email ||
+      formData.password ||
+      formData.confirmPassword
+    ) {
+      setError("Vui long nhap du cac truong");
+      return;
+    }
     // Kiểm tra password và confirmPassword
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError("Passwords do not match");
       return;
     }
 
     try {
-      const response = await axios.post('http://10.32.5.48:8081/api/v1/users', {
+      const response = await axios.post("http://10.32.5.48:8081/api/v1/users", {
         ...formData,
         isAdmin: false, // Set isAdmin to false by default
       });
-      console.log('User registered successfully:', response.data);
-    alert("Dang ky thanh cong nhan ok de chuyen den trang dang nhap");
-      window.location.href='/';
+      console.log("User registered successfully:", response.data);
+      alert("Dang ky thanh cong nhan ok de chuyen den trang dang nhap");
+      window.location.href = "/";
     } catch (error) {
-      console.error('Error registering user:', error);
+      console.error("Error registering user:", error);
       // Handle error, e.g., show an error message to the user
     }
   };
@@ -43,7 +53,7 @@ const Register = () => {
   return (
     <div>
       <h2>Register</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
       <form onSubmit={handleSubmit}>
         <label>
           Username:

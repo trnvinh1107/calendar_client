@@ -5,8 +5,7 @@ import './App.css';
 import Login from './compoment/User/Login';
 import Register from './compoment/User/Register';
 import Calendar from './compoment/Calendar/Calendar';
-import UserList from './compoment/User/UserList';
-import AddRoom from './compoment/Room/AddRoom';
+import UserList from './compoment/User/UserList'; 
 import RoomList from './compoment/Room/RoomList';
 function App() {
   return (
@@ -18,7 +17,6 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/users/manage" element={<UserList />} />
-            <Route path="/room/add" element={<AddRoom isOpen={true} onClose={() => {}} />} />
             <Route path="/room/list" element={<RoomList />} />
          </Routes>
         </header>
