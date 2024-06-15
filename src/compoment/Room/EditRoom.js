@@ -33,7 +33,7 @@ const EditRoom = ({ isOpen, onClose, room, onUpdate }) => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `http://10.32.5.48:8081/api/v1/rooms/${room.id}`,
+        `http://192.168.2.6:8081/api/v1/rooms/${room.id}`,
         formData
       );
       console.log("Room updated successfully:", response.data);
@@ -55,7 +55,7 @@ const EditRoom = ({ isOpen, onClose, room, onUpdate }) => {
       isOpen={isOpen}
       onRequestClose={onClose}
       overlayClassName="modal-overlay"
-      className="modal-content"
+      className="modal-content bg-white"
     >
       <div className="modal-header">
         <h2 className="modal-title">Edit Room</h2>

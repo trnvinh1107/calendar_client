@@ -31,7 +31,7 @@ const RoomList = () => {
 
     // Send PUT request to update isActivity on the server
     axios
-      .put(`http://10.32.5.48:8081/api/v1/rooms/${room.id}`, {
+      .put(`http://192.168.2.6:8081/api/v1/rooms/${room.id}`, {
         name: room.name,
         capacity: room.capacity,
         description: room.description,
@@ -59,7 +59,7 @@ const RoomList = () => {
   const fetchRooms = async () => {
     try {
       const response = await axios.get(
-        "http://10.32.5.48:8081/api/v1/rooms/admin"
+        "http://192.168.2.6:8081/api/v1/rooms/admin"
       );
       setRooms(response.data);
     } catch (error) {
@@ -92,7 +92,7 @@ const RoomList = () => {
     setSelectedRoom(null);
   };
   const handleDeleteRoom = async (id) => {
-    await axios.delete(`http://10.32.5.48:8081/api/v1/rooms/${id}`);
+    await axios.delete(`http://192.168.2.6:8081/api/v1/rooms/${id}`);
     alert("Room deleted successfully!");
     fetchRooms(); // Reload rooms after deletion
   };
@@ -102,7 +102,7 @@ const RoomList = () => {
       <h2>Danh sách phòng</h2>
       <button  onClick={() => handleAddRoom()}
          style={{ cursor: "pointer", color: "blue", marginRight: 10 }}>Them phong</button>
-      <table>
+      <table border="1">
         <thead>
           <tr>
             <th>ID</th>

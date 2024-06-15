@@ -22,7 +22,7 @@ const AddBookingRoom = ({ isOpen, onClose, selectedDate }) => {
 
   const fetchRooms = async () => {
     try {
-      const response = await axios.get("http://10.32.5.48:8081/api/v1/rooms");
+      const response = await axios.get("http://192.168.2.6:8081/api/v1/rooms");
       setRooms(response.data);
     } catch (error) {
       console.error("Error fetching rooms:", error);
@@ -54,7 +54,7 @@ const AddBookingRoom = ({ isOpen, onClose, selectedDate }) => {
 
     try {
       const checkConflictResponse = await axios.get(
-        `http://10.32.5.48:8081/api/v1/bookingroom/check`,
+        `http://192.168.2.6:8081/api/v1/bookingroom/check`,
         {
           params: {
             roomId: selectedRoom,
@@ -71,7 +71,7 @@ const AddBookingRoom = ({ isOpen, onClose, selectedDate }) => {
         return;
       }
 
-      await axios.post("http://10.32.5.48:8081/api/v1/bookingroom", {
+      await axios.post("http://192.168.2.6:8081/api/v1/bookingroom", {
         userId: 1,
         roomId: selectedRoom,
         startTime: formattedStartTime,
@@ -95,7 +95,7 @@ const AddBookingRoom = ({ isOpen, onClose, selectedDate }) => {
       isOpen={isOpen}
       onRequestClose={onClose}
       overlayClassName="modal-overlay"
-      className="modal-content"
+      className="modal-content bg-white"
     >
       <div className="modal-header">
         <h2 className="modal-title">Đặt phòng</h2>

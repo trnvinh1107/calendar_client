@@ -67,7 +67,7 @@ label {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: white;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -124,7 +124,7 @@ label {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -187,8 +187,7 @@ button {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-}
-
+} 
 input[type="radio"] {
   margin-right: 5px;
 }

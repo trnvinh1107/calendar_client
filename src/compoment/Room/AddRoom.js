@@ -23,7 +23,7 @@ const AddRoom = ({ isOpen, onClose }) => {
     }
 
     try {
-      await axios.post("http://10.32.5.48:8081/api/v1/rooms", {
+      await axios.post("http://192.168.2.6:8081/api/v1/rooms", {
         name,
         capacity: parseInt(capacity),
         description,
@@ -43,7 +43,7 @@ const AddRoom = ({ isOpen, onClose }) => {
       isOpen={isOpen}
       onRequestClose={onClose}
       overlayClassName="modal-overlay"
-      className="modal-content"
+      className="modal-content bg-white"
     >
       <div className="modal-header">
         <h2 className="modal-title">Thêm phòng mới</h2>

@@ -1,7 +1,16 @@
-// src/components/RegisterForm.js
 import React, { useState } from "react";
-import axios from "axios"; // Import Redirect for navigation
-import { Link } from "react-router-dom"; // Import Link for navigation
+import axios from "axios";
+import "mdb-react-ui-kit/dist/css/mdb.min.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import {
+  MDBBtn,
+  MDBContainer,
+  MDBRow,
+  MDBCol,
+  MDBCard,
+  MDBCardBody,
+  MDBInput,
+} from "mdb-react-ui-kit";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -14,119 +23,178 @@ const Register = () => {
   });
 
   const [error, setError] = useState("");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (
-      !formData.userName ||
-      formData.firstName ||
-      formData.lastName ||
-      formData.email ||
-      formData.password ||
-      formData.confirmPassword
-    ) {
-      setError("Vui long nhap du cac truong");
-      return;
-    }
-    // Kiểm tra password và confirmPassword
+
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
       return;
     }
 
     try {
-      const response = await axios.post("http://10.32.5.48:8081/api/v1/users", {
-        ...formData,
-        isAdmin: false, // Set isAdmin to false by default
-      });
-      console.log("User registered successfully:", response.data);
-      alert("Dang ky thanh cong nhan ok de chuyen den trang dang nhap");
+      // Kiểm tra xem userName đã tồn tại chưa
+      const checkUserNameResponse = await axios.get(
+        `http://192.168.2.6:8081/api/v1/users/check/${formData.userName}`
+      );
+
+      if (checkUserNameResponse.data) {
+        setError("Username already exists");
+        return;
+      }
+
+      // Tiếp tục đăng ký nếu userName chưa tồn tại
+      const response = await axios.post(
+        "http://192.168.2.6:8081/api/v1/users",
+        {
+          ...formData,
+          isAdmin: false, // Set isAdmin to false by default
+        }
+      );
+
+      console.log("formData registered successfully:", response.data);
+      alert("Đăng ký thành công, nhấn OK để chuyển đến trang đăng nhập");
       window.location.href = "/";
     } catch (error) {
-      console.error("Error registering user:", error);
-      // Handle error, e.g., show an error message to the user
+      console.error("Error registering formData:", error);
+      setError("Registration failed. Please try again.");
     }
   };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
   return (
-    <div>
-      <h2>Register</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+    <MDBContainer fluid>
       <form onSubmit={handleSubmit}>
-        <label>
-          Username:
-          <input
-            type="text"
-            name="userName"
-            value={formData.userName}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          First Name:
-          <input
-            type="text"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Last Name:
-          <input
-            type="text"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Email:
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Password:
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Confirm Password:
-          <input
-            type="password"
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
-        <button type="submit">Register</button>
+        <MDBRow className="d-flex justify-content-center align-items-center h-100">
+          <MDBCol col="12">
+            <MDBCard
+              className="bg-dark text-white my-5 mx-auto"
+              style={{ borderRadius: "1rem", maxWidth: "400px" }}
+            >
+              <MDBCardBody className="p-5 d-flex flex-column align-items-center mx-auto w-100">
+                <h2 className="fw-bold mb-2 ">Create Account</h2>
+                {error && (
+                  <p style={{ color: "red", fontSize: "13px" }}>{error}</p>
+                )}
+                <MDBInput
+                  className="text-white"
+                  name="userName"
+                  id="userName"
+                  required
+                  placeholder="Enter User Name"
+                  onChange={handleChange}
+                  value={formData.userName}
+                  style={{ width: "290px" }}
+                  wrapperClass="mb-4 mx-5 w-100"
+                  labelClass="text-white"
+                  label="User name"
+                  type="text"
+                  size="lg"
+                />
+                <MDBInput
+                  className="text-white"
+                  name="firstName"
+                  id="firstName"
+                  placeholder="Enter First Name"
+                  onChange={handleChange}
+                  value={formData.firstName}
+                  style={{ width: "290px" }}
+                  required
+                  wrapperClass="mb-4 mx-5 w-100"
+                  labelClass="text-white"
+                  label="First name"
+                  type="text"
+                  size="lg"
+                />
+                <MDBInput
+                  className="text-white"
+                  name="lastName"
+                  id="lastName"
+                  placeholder="Enter Last Name"
+                  onChange={handleChange}
+                  value={formData.lastName}
+                  required
+                  style={{ width: "290px" }}
+                  wrapperClass="mb-4 mx-5 w-100"
+                  labelClass="text-white"
+                  label="Last name"
+                  type="text"
+                  size="lg"
+                />
+                <MDBInput
+                  className="text-white"
+                  name="email"
+                  id="email"
+                  placeholder="Enter Email"
+                  onChange={handleChange}
+                  required
+                  value={formData.email}
+                  style={{ width: "290px" }}
+                  wrapperClass="mb-4 mx-5 w-100"
+                  labelClass="text-white"
+                  label="Email"
+                  type="email"
+                  size="lg"
+                />
+                <MDBInput
+                  className="text-white"
+                  name="password"
+                  id="password"
+                  placeholder="Enter Password"
+                  onChange={handleChange}
+                  required
+                  value={formData.password}
+                  style={{ width: "290px" }}
+                  wrapperClass="mb-4 mx-5 w-100"
+                  labelClass="text-white"
+                  label="Password"
+                  type="password"
+                  size="lg"
+                />
+                <MDBInput
+                  className="text-white"
+                  name="confirmPassword"
+                  id="confirmPassword"
+                  placeholder="Confirm Password"
+                  onChange={handleChange}
+                  required
+                  style={{ width: "290px" }}
+                  value={formData.confirmPassword}
+                  wrapperClass="mb-4 mx-5 w-100"
+                  labelClass="text-white"
+                  label="Confirm Password"
+                  type="password"
+                  size="lg"
+                />
+                <MDBBtn
+                  type="submit"
+                  outline
+                  className="mb-3 mx-2 px-5"
+                  color="white"
+                  size="lg"
+                  style={{ width: "175px", backgroundColor: "#04AA6D" }}
+                >
+                  Register
+                </MDBBtn>
+                <div>
+                  <p className="mb-0">
+                    <a
+                      href="/"
+                      style={{ color: "#128dd3", textDecoration: "underline" }}
+                    >
+                      Back to Login
+                    </a>
+                  </p>
+                </div>
+              </MDBCardBody>
+            </MDBCard>
+          </MDBCol>
+        </MDBRow>
       </form>
-      <p>
-        Already have an account? <Link to="/">Login</Link>
-      </p>
-    </div>
+    </MDBContainer>
   );
 };
 

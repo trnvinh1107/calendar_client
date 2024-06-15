@@ -53,7 +53,7 @@ function Calendar() {
     const fetchEvents = async () => {
       try {
         const response = await axios.get(
-          "http://10.32.5.48:8081/api/v1/bookingroom"
+          "http://192.168.2.6:8081/api/v1/bookingroom"
         );
         const bookingEvents = response.data.map((booking) => ({
           id: booking.id, 
@@ -89,7 +89,7 @@ function Calendar() {
         onClose={handleCloseModal}
         selectedDate={selectedDate}
       />
-      <DetailBookingRoom
+      <DetailBookingRoom  
         isOpen={modalDetailIsOpen}
         onClose={handleCloseModal}
         selectedEvent={selectedEvent}
