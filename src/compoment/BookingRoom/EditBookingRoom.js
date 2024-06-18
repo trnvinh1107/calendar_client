@@ -49,21 +49,24 @@ const EditBookingRoom = ({ isOpen, onClose, bookingData, onUpdate }) => {
 
     try {
       // Check conflict
-      const checkConflictResponse = await axios.get('http://192.168.2.6:8081/api/v1/bookingroom/check', {
+      const checkConflictResponse = await axios.get('http://localhost:8081/api/v1/bookingroom/check', {
         params: {
           roomId: roomId,
           startTime: formattedStartTime,
           endTime: formattedEndTime,
         },
       });
-
-      if (checkConflictResponse.data.conflict) {
-        setErrorMessage('Phòng này đã có người đặt trước trong thời gian bạn chọn.');
-        return;
+      console.log("abc: " + roomId);
+      console.log("def: " + formData.roomId);
+      if(formData.roomId !== roomId){
+        if (checkConflictResponse.data.conflict) {
+          setErrorMessage('Phòng này đã có người đặt trước trong thời gian bạn chọn.');
+          return;
+        }
       }
 
       // Update booking
-      await axios.put(`http://192.168.2.6:8081/api/v1/bookingroom/${id}`, formData);
+      await axios.put(`http://localhost:8081/api/v1/bookingroom/${id}`, formData);
       onUpdate(formData);
       onClose();
       alert('Cập nhật thành công!');

@@ -30,7 +30,7 @@ const EditUser = ({ isOpen, onClose, user, onUpdate }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`http://192.168.2.6:8081/api/v1/users/${user.userId}`, formData);
+      const response = await axios.put(`http://localhost:8081/api/v1/users/${user.userId}`, formData);
       onUpdate(response.data);
       onClose();
       alert("Cap nhat thanh cong!");

@@ -13,6 +13,7 @@ function Calendar() {
   const [modalDetailIsOpen, setModalDetailIsOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
   const handleDateClick = (arg) => {
     const clickedDate = new Date(arg.dateStr);
     const currentDate = new Date();
@@ -21,7 +22,7 @@ function Calendar() {
     currentDate.setHours(0, 0, 0, 0);
 
     if (clickedDate < currentDate) {
-      alert("kh duoc chon ngay cua qua khu");
+      alert("Không được chọn ngày của quá khứ.");
     } else {
       setSelectedDate(arg.dateStr);
       setModalAddIsOpen(true);
@@ -50,10 +51,14 @@ function Calendar() {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("currentUser"));
+  if (storedUser) {
+    setCurrentUser(storedUser);
+  }
     const fetchEvents = async () => {
       try {
         const response = await axios.get(
-          "http://192.168.2.6:8081/api/v1/bookingroom"
+          "http://localhost:8081/api/v1/bookingroom"
         );
         const bookingEvents = response.data.map((booking) => ({
           id: booking.id, 
@@ -88,6 +93,7 @@ function Calendar() {
         isOpen={modalAddIsOpen}
         onClose={handleCloseModal}
         selectedDate={selectedDate}
+        currentUser={currentUser} 
       />
       <DetailBookingRoom  
         isOpen={modalDetailIsOpen}

@@ -279,3 +279,11 @@ input:checked + .slider:before {
   margin: 8px;
   padding: 8px;
 } 
+.ul-main{
+  display: flex;
+  list-style: none;
+}
+.ul-main li{
+  text-decoration: none;
+  margin-left: 30px;
+}

@@ -1,4 +1,3 @@
-// src/Login.js
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "mdb-react-ui-kit/dist/css/mdb.min.css";
@@ -14,17 +13,19 @@ import {
   MDBInput,
   MDBIcon,
 } from "mdb-react-ui-kit";
-function Login() {
+
+function Login({ onLogin }) {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
       const response = await fetch(
-        "http://192.168.2.6:8081/api/v1/users/login",
+        "http://localhost:8081/api/v1/users/login",
         {
           method: "POST",
           headers: {
@@ -37,8 +38,10 @@ function Login() {
       if (response.ok) {
         const user = await response.json();
         console.log("Login successful:", user);
-        // Handle successful login (e.g., redirect to dashboard)
-        navigate("/calendar"); // Redirect to the dashboard
+        onLogin(user); // Trigger the login function passed from parent component
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        localStorage.setItem('apiToken', user.apiToken); // Store the API token
+        navigate("/calendar"); // Redirect to the calendar page after successful login
       } else {
         setError("Invalid credentials");
       }
@@ -65,7 +68,6 @@ function Login() {
                   <MDBInput
                     className="text-white"
                     value={userName}
-                    placeholder="Enter User Name"
                     onChange={(e) => setUserName(e.target.value)}
                     required
                     style={{ width: "290px" }}
@@ -73,14 +75,13 @@ function Login() {
                     labelClass="text-white"
                     label="Username"
                     id="formControlLg"
-                    type="username"
+                    type="text"
                     size="lg"
                   />
 
                   <MDBInput
                     className="text-white"
                     value={password}
-                    placeholder="Enter Password"
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     style={{ width: "290px" }}
@@ -92,7 +93,7 @@ function Login() {
                     size="lg"
                   />
 
-                  <p className="small mb-3 pb-lg-2 text-white ">
+                  <p className="small mb-3 pb-lg-2 text-white">
                     <a className="text-white" href="/">
                       Forgot password?
                     </a>
@@ -105,6 +106,7 @@ function Login() {
                     color="white"
                     size="lg"
                     style={{ width: "180px", backgroundColor: "#04AA6D" }}
+                    type="submit"
                   >
                     Login
                   </MDBBtn>
@@ -141,11 +143,10 @@ function Login() {
                   <p className="small mb-3">
                     Don't have an account?{" "}
                     <a
-                      href="/Register"
+                      href="/register"
                       style={{
                         color: "#128dd3",
                         textDecoration: "underline",
-                        hover: "1",
                       }}
                     >
                       Register

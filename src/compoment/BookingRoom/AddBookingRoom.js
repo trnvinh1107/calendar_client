@@ -16,13 +16,15 @@ const AddBookingRoom = ({ isOpen, onClose, selectedDate }) => {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
 
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
   useEffect(() => {
     fetchRooms();
   }, []);
 
   const fetchRooms = async () => {
     try {
-      const response = await axios.get("http://192.168.2.6:8081/api/v1/rooms");
+      const response = await axios.get("http://localhost:8081/api/v1/rooms");
       setRooms(response.data);
     } catch (error) {
       console.error("Error fetching rooms:", error);
@@ -38,7 +40,7 @@ const AddBookingRoom = ({ isOpen, onClose, selectedDate }) => {
       setBookingMessage("Vui lòng chọn 1 phòng.");
       return;
     }
- 
+
     const combinedStartTime = `${selectedDate}T${startTime}`;
     const combinedEndTime = `${selectedDate}T${endTime}`;
 
@@ -54,7 +56,7 @@ const AddBookingRoom = ({ isOpen, onClose, selectedDate }) => {
 
     try {
       const checkConflictResponse = await axios.get(
-        `http://192.168.2.6:8081/api/v1/bookingroom/check`,
+        `http://localhost:8081/api/v1/bookingroom/check`,
         {
           params: {
             roomId: selectedRoom,
@@ -71,8 +73,8 @@ const AddBookingRoom = ({ isOpen, onClose, selectedDate }) => {
         return;
       }
 
-      await axios.post("http://192.168.2.6:8081/api/v1/bookingroom", {
-        userId: 1,
+      await axios.post("http://localhost:8081/api/v1/bookingroom", {
+        userId: currentUser.userId,
         roomId: selectedRoom,
         startTime: formattedStartTime,
         endTime: formattedEndTime,
@@ -122,12 +124,12 @@ const AddBookingRoom = ({ isOpen, onClose, selectedDate }) => {
             </select>
           </div>
           <div className="moTa">
-          <label>Mô tả:</label>
-          <input
-            type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
+            <label>Mô tả:</label>
+            <input
+              type="text"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
           </div>
           <div className="time">
             <label>Thời gian bắt đầu:</label>
@@ -146,7 +148,9 @@ const AddBookingRoom = ({ isOpen, onClose, selectedDate }) => {
           </div>
         </div>
         <div className="booking-message">{bookingMessage}</div>
-        <button style={{color: 'white'}} onClick={handleBookRoom}>Đặt phòng</button>
+        <button style={{ color: "white" }} onClick={handleBookRoom}>
+          Đặt phòng
+        </button>
       </div>
     </Modal>
   );

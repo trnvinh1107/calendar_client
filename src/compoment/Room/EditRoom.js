@@ -33,7 +33,7 @@ const EditRoom = ({ isOpen, onClose, room, onUpdate }) => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `http://192.168.2.6:8081/api/v1/rooms/${room.id}`,
+        `http://localhost:8081/api/v1/rooms/${room.id}`,
         formData
       );
       console.log("Room updated successfully:", response.data);

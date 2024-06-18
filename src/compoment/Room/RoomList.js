@@ -1,13 +1,11 @@
+// src/compoment/Room/RoomList.js
 import React, { useState, useEffect } from "react";
-import Modal from "react-modal";
-import "../../App.css";
 import axios from "axios";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import EditRoom from "./EditRoom";
 import AddRoom from "./AddRoom";
 
-Modal.setAppElement("#root");
 const RoomList = () => {
   const [rooms, setRooms] = useState([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -17,67 +15,62 @@ const RoomList = () => {
   useEffect(() => {
     fetchRooms();
   }, []);
-  const handleRoomChange = (room) => {
-    // Toggle isActivity locally
-    const updatedRooms = rooms.map((u) => {
-      if (u.id === room.id) {
-        return { ...u, isActivity: !u.isActivity }; // Toggle isActivity
+
+  const fetchRooms = async () => {
+    const token = localStorage.getItem("apiToken");
+    try {
+      const response = await fetch("http://localhost:8081/api/v1/rooms/admin", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        
+      setRooms(data);
       }
-      return u;
+    } catch (error) {
+      console.error("Error fetching rooms:", error);
+    }
+  };
+
+  const handleRoomChange = (room) => {
+    const updatedRooms = rooms.map((r) => {
+      if (r.id === room.id) {
+        return { ...r, isActivity: !r.isActivity };
+      }
+      return r;
     });
 
-    // Update UI immediately
     setRooms(updatedRooms);
 
-    // Send PUT request to update isActivity on the server
     axios
-      .put(`http://192.168.2.6:8081/api/v1/rooms/${room.id}`, {
-        name: room.name,
-        capacity: room.capacity,
-        description: room.description,
+      .put(`http://localhost:8081/api/v1/rooms/${room.id}`, {
+        ...room,
         isActivity: !room.isActivity,
       })
       .then((response) => {
         console.log("Room status updated successfully:", response.data);
-
-        // Update user state with server response
-        const updatedRooms = rooms.map((u) => {
-          if (u.id === room.id) {
-            return { ...u, isActivity: !u.isActivity };
-          }
-          return u;
-        });
-
-        setRooms(updatedRooms); // Update state after successful server response
       })
       .catch((error) => {
         console.error("Error updating room status:", error.response.data.error);
-        // Rollback to previous state on error
         setRooms(rooms);
       });
-  };
-  const fetchRooms = async () => {
-    try {
-      const response = await axios.get(
-        "http://192.168.2.6:8081/api/v1/rooms/admin"
-      );
-      setRooms(response.data);
-    } catch (error) {
-      console.error("Error fetching rooms:", error);
-    }
   };
 
   const handleEditRoom = (room) => {
     setSelectedRoom(room);
     setIsEditModalOpen(true);
   };
-  const handleAddRoom = () => { 
+
+  const handleAddRoom = () => {
     setIsAddModalOpen(true);
   };
 
   const handleCloseAddModal = () => {
-    setIsAddModalOpen(false); 
+    setIsAddModalOpen(false);
   };
+
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
     setSelectedRoom(null);
@@ -91,17 +84,22 @@ const RoomList = () => {
     setIsEditModalOpen(false);
     setSelectedRoom(null);
   };
+
   const handleDeleteRoom = async (id) => {
-    await axios.delete(`http://192.168.2.6:8081/api/v1/rooms/${id}`);
+    await axios.delete(`http://localhost:8081/api/v1/rooms/${id}`);
     alert("Room deleted successfully!");
-    fetchRooms(); // Reload rooms after deletion
+    fetchRooms();
   };
 
   return (
     <div className="room-list">
       <h2>Danh sách phòng</h2>
-      <button  onClick={() => handleAddRoom()}
-         style={{ cursor: "pointer", color: "blue", marginRight: 10 }}>Them phong</button>
+      <button
+        onClick={() => handleAddRoom()}
+        style={{ cursor: "pointer", color: "blue", marginRight: 10 }}
+      >
+        Thêm phòng
+      </button>
       <table border="1">
         <thead>
           <tr>
@@ -144,10 +142,7 @@ const RoomList = () => {
           ))}
         </tbody>
       </table>
-      <AddRoom
-        isOpen={isAddModalOpen}
-        onClose={handleCloseAddModal}  
-      />
+      <AddRoom isOpen={isAddModalOpen} onClose={handleCloseAddModal} />
       <EditRoom
         isOpen={isEditModalOpen}
         onClose={handleCloseEditModal}
