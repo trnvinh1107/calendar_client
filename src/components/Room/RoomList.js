@@ -19,7 +19,7 @@ const RoomList = () => {
   const fetchRooms = async () => {
     const token = localStorage.getItem("apiToken");
     try {
-      const response = await fetch("http://localhost:8081/api/v1/rooms/admin", {
+      const response = await fetch("http://10.32.5.48:8081/api/v1/rooms/admin", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -45,7 +45,7 @@ const RoomList = () => {
     setRooms(updatedRooms);
 
     axios
-      .put(`http://localhost:8081/api/v1/rooms/${room.id}`, {
+      .put(`http://10.32.5.48:8081/api/v1/rooms/${room.id}`, {
         ...room,
         isActivity: !room.isActivity,
       }, {
@@ -90,7 +90,7 @@ const RoomList = () => {
   };
 
   const handleDeleteRoom = async (id) => {
-    await axios.delete(`http://localhost:8081/api/v1/rooms/${id}`);
+    await axios.delete(`http://10.32.5.48:8081/api/v1/rooms/${id}`);
     alert("Room deleted successfully!");
     fetchRooms();
   };
@@ -100,7 +100,7 @@ const RoomList = () => {
       <h2>Danh sách phòng</h2>
       <button
         onClick={() => handleAddRoom()}
-        style={{ cursor: "pointer", color: "blue", marginRight: 10 }}
+        style={{ cursor: "pointer", color: "white", margin: "10px" }}
       >
         Thêm phòng
       </button>

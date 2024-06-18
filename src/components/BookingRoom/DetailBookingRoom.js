@@ -43,7 +43,7 @@ const DetailBookingRoom = ({ isOpen, onClose, selectedEvent }) => {
   const fetchRoomDetail = async (id) => {
     try {
       const response = await axios.get(
-        `http://localhost:8081/api/v1/bookingroom/${id}`
+        `http://10.32.5.48:8081/api/v1/bookingroom/${id}`
       );
       setRoomDetail(response.data);
     } catch (error) {
@@ -55,7 +55,7 @@ const DetailBookingRoom = ({ isOpen, onClose, selectedEvent }) => {
   const handleDeleteBooking = async () => {
     try {
       await axios.delete(
-        `http://localhost:8081/api/v1/bookingroom/${selectedEvent.id}`
+        `http://10.32.5.48:8081/api/v1/bookingroom/${selectedEvent.id}`
       );
       alert("Booking deleted successfully!");
       onClose();

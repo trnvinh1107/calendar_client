@@ -33,7 +33,7 @@ const EditRoom = ({ isOpen, onClose, room, onUpdate }) => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `http://localhost:8081/api/v1/rooms/${room.id}`,
+        `http://10.32.5.48:8081/api/v1/rooms/${room.id}`,
         formData,
         {
           headers: {
@@ -104,6 +104,7 @@ const EditRoom = ({ isOpen, onClose, room, onUpdate }) => {
             name="isActivity"
             checked={formData.isActivity}
             onChange={handleChange}
+            style={{margin: '10px'}}
             // required
           />
           <button type="submit">Update Room</button>

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
 import axios from "axios";
-
 Modal.setAppElement("#root");
 
 const AddRoom = ({ isOpen, onClose }) => {
@@ -23,7 +22,7 @@ const AddRoom = ({ isOpen, onClose }) => {
     }
 
     try {
-      await axios.post("http://localhost:8081/api/v1/rooms", {
+      await axios.post("http://10.32.5.48:8081/api/v1/rooms", {
         name,
         capacity: parseInt(capacity),
         description,
@@ -61,7 +60,8 @@ const AddRoom = ({ isOpen, onClose }) => {
           <input
             type="text"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => setName(e.target.value)} 
+            style={{margin: "10px 40px",width: "270px"}}
           />
         </div>
         <div>
@@ -70,6 +70,7 @@ const AddRoom = ({ isOpen, onClose }) => {
             type="number"
             value={capacity}
             onChange={(e) => setCapacity(e.target.value)}
+            style={{margin: "10px 45px",width: "270px"}}
           />
         </div>
         <div>
@@ -78,6 +79,7 @@ const AddRoom = ({ isOpen, onClose }) => {
             type="text"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            style={{margin: "10px 0 10px 75px",width: "270px"}}
           />
         </div>
         <div>
@@ -90,7 +92,7 @@ const AddRoom = ({ isOpen, onClose }) => {
         </div>
 
         <div className="add-room-message">{addRoomMessage}</div>
-        <button onClick={handleAddRoom}>Thêm phòng</button>
+        <button onClick={handleAddRoom} style={{marginLeft: "35%"}}>Thêm phòng</button>
       </div>
     </Modal>
   );

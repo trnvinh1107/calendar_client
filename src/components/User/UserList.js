@@ -18,7 +18,7 @@ const UserList = () => {
     const token = localStorage.getItem("apiToken");
     console.log(token);
     try {
-      const response = await fetch("http://localhost:8081/api/v1/users", {
+      const response = await fetch("http://10.32.5.48:8081/api/v1/users", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -38,7 +38,7 @@ const UserList = () => {
 
   // const fetchUsers = async () => {
   //   try {
-  //     const response = await axios.get('http://localhost:8081/api/v1/users');
+  //     const response = await axios.get('http://10.32.5.48:8081/api/v1/users');
   //     setUsers(response.data);
   //   } catch (error) {
   //     console.error('Error fetching users:', error.response.data.error);
@@ -56,7 +56,7 @@ const UserList = () => {
 
     axios
       .put(
-        `http://localhost:8081/api/v1/users/${user.userId}`,
+        `http://10.32.5.48:8081/api/v1/users/${user.userId}`,
         {
           ...user,
           isAdmin: !user.isAdmin,
@@ -82,7 +82,7 @@ const UserList = () => {
   const handleDeleteUser = async (userId) => {
     const token = localStorage.getItem("apiToken");
     try {
-      await axios.delete(`http://localhost:8081/api/v1/users/${userId}`, {
+      await axios.delete(`http://10.32.5.48:8081/api/v1/users/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -117,7 +117,7 @@ const UserList = () => {
     return <div>{error}</div>;
   }
   return (
-    <div className="container form-container">
+    <div>
       <h2>Danh sách người dùng</h2>
       <table border="1">
         <thead>

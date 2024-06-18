@@ -58,7 +58,7 @@ function Calendar() {
     const fetchEvents = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8081/api/v1/bookingroom"
+          "http://10.32.5.48:8081/api/v1/bookingroom"
         );
         const bookingEvents = response.data.map((booking) => ({
           id: booking.id, 

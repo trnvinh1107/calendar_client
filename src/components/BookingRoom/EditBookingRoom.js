@@ -49,7 +49,7 @@ const EditBookingRoom = ({ isOpen, onClose, bookingData, onUpdate }) => {
 
     try {
       // Check conflict
-      const checkConflictResponse = await axios.get('http://localhost:8081/api/v1/bookingroom/check', {
+      const checkConflictResponse = await axios.get('http://10.32.5.48:8081/api/v1/bookingroom/check', {
         params: {
           roomId: roomId,
           startTime: formattedStartTime,
@@ -66,7 +66,7 @@ const EditBookingRoom = ({ isOpen, onClose, bookingData, onUpdate }) => {
       }
 
       // Update booking
-      await axios.put(`http://localhost:8081/api/v1/bookingroom/${id}`, formData);
+      await axios.put(`http://10.32.5.48:8081/api/v1/bookingroom/${id}`, formData);
       onUpdate(formData);
       onClose();
       alert('Cập nhật thành công!');

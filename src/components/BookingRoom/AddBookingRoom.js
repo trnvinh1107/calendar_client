@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 import axios from "axios";
 import { DateTime } from "luxon";
-import "../../App.css";
 
 const dateFormat = "yyyy-MM-dd'T'HH:mm:ss"; // Format used for Luxon
 
@@ -24,7 +23,7 @@ const AddBookingRoom = ({ isOpen, onClose, selectedDate }) => {
 
   const fetchRooms = async () => {
     try {
-      const response = await axios.get("http://localhost:8081/api/v1/rooms");
+      const response = await axios.get("http://10.32.5.48:8081/api/v1/rooms");
       setRooms(response.data);
     } catch (error) {
       console.error("Error fetching rooms:", error);
@@ -56,7 +55,7 @@ const AddBookingRoom = ({ isOpen, onClose, selectedDate }) => {
 
     try {
       const checkConflictResponse = await axios.get(
-        `http://localhost:8081/api/v1/bookingroom/check`,
+        `http://10.32.5.48:8081/api/v1/bookingroom/check`,
         {
           params: {
             roomId: selectedRoom,
@@ -73,7 +72,7 @@ const AddBookingRoom = ({ isOpen, onClose, selectedDate }) => {
         return;
       }
 
-      await axios.post("http://localhost:8081/api/v1/bookingroom", {
+      await axios.post("http://10.32.5.48:8081/api/v1/bookingroom", {
         userId: currentUser.userId,
         roomId: selectedRoom,
         startTime: formattedStartTime,
@@ -148,7 +147,7 @@ const AddBookingRoom = ({ isOpen, onClose, selectedDate }) => {
           </div>
         </div>
         <div className="booking-message">{bookingMessage}</div>
-        <button style={{ color: "white" }} onClick={handleBookRoom}>
+        <button style={{ color: "white", marginLeft:"35%" }} onClick={handleBookRoom}>
           Đặt phòng
         </button>
       </div>

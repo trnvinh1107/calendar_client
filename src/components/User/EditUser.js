@@ -32,7 +32,7 @@ const EditUser = ({ isOpen, onClose, user, onUpdate }) => {
     const token = localStorage.getItem("apiToken");
     try {
       const response = await axios.put(
-        `http://localhost:8081/api/v1/users/${user.userId}`,
+        `http://10.32.5.48:8081/api/v1/users/${user.userId}`,
         formData,
         {
           headers: {

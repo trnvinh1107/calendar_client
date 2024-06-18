@@ -35,7 +35,7 @@ const Register = () => {
     try {
       // Kiểm tra xem userName đã tồn tại chưa
       const checkUserNameResponse = await axios.get(
-        `http://localhost:8081/api/v1/users/check/${formData.userName}`
+        `http://10.32.5.48:8081/api/v1/users/check/${formData.userName}`
       );
 
       if (checkUserNameResponse.data) {
@@ -45,7 +45,7 @@ const Register = () => {
 
       // Tiếp tục đăng ký nếu userName chưa tồn tại
       const response = await axios.post(
-        "http://localhost:8081/api/v1/users",
+        "http://10.32.5.48:8081/api/v1/users",
         {
           ...formData,
           isAdmin: false, // Set isAdmin to false by default
