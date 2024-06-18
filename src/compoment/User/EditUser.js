@@ -29,8 +29,17 @@ const EditUser = ({ isOpen, onClose, user, onUpdate }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const token = localStorage.getItem("apiToken");
     try {
-      const response = await axios.put(`http://localhost:8081/api/v1/users/${user.userId}`, formData);
+      const response = await axios.put(
+        `http://localhost:8081/api/v1/users/${user.userId}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       onUpdate(response.data);
       onClose();
       alert("Cap nhat thanh cong!");

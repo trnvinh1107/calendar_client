@@ -48,6 +48,10 @@ const RoomList = () => {
       .put(`http://localhost:8081/api/v1/rooms/${room.id}`, {
         ...room,
         isActivity: !room.isActivity,
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('apiToken')}`
+        }
       })
       .then((response) => {
         console.log("Room status updated successfully:", response.data);

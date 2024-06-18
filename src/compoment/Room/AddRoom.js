@@ -28,6 +28,10 @@ const AddRoom = ({ isOpen, onClose }) => {
         capacity: parseInt(capacity),
         description,
         isActivity,
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('apiToken')}`
+        }
       });
 
       alert("Thêm phòng thành công!");

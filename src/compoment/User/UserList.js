@@ -55,10 +55,18 @@ const UserList = () => {
     setUsers(updatedUsers);
 
     axios
-      .put(`http://localhost:8081/api/v1/users/${user.userId}`, {
-        ...user,
-        isAdmin: !user.isAdmin,
-      })
+      .put(
+        `http://localhost:8081/api/v1/users/${user.userId}`,
+        {
+          ...user,
+          isAdmin: !user.isAdmin,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("apiToken")}`,
+          },
+        }
+      )
       .then((response) => {
         console.log("Admin status updated successfully:", response.data);
       })
@@ -72,9 +80,19 @@ const UserList = () => {
   };
 
   const handleDeleteUser = async (userId) => {
-    await axios.delete(`http://localhost:8081/api/v1/users/${userId}`);
-    alert("User deleted successfully!");
-    fetchUsers();
+    const token = localStorage.getItem("apiToken");
+    try {
+      await axios.delete(`http://localhost:8081/api/v1/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      alert("User deleted successfully!");
+      fetchUsers();
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      alert("Failed to delete user. Please try again later.");
+    }
   };
 
   const handleEditUser = (user) => {

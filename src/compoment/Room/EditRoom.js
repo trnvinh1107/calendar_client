@@ -28,13 +28,18 @@ const EditRoom = ({ isOpen, onClose, room, onUpdate }) => {
     const value =
     e.target.type === 'checkbox' ? e.target.checked : e.target.value;
   setFormData({ ...formData, [e.target.name]: value });};
-
+  const token = localStorage.getItem("apiToken");
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.put(
         `http://localhost:8081/api/v1/rooms/${room.id}`,
-        formData
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       console.log("Room updated successfully:", response.data);
       onUpdate(response.data); // Update the room list with the updated room
