@@ -61,17 +61,20 @@ function App() {
                     </>
                   )}
                   <li>
-                    <a
+                    <button
                       onClick={handleLogout}
-                      href="#"
                       style={{
                         cursor: "pointer",
                         color: "blue",
                         marginLeft: 10,
+                        background: "none",
+                        border: "none",
+                        padding: 0,
+                        font: "inherit",
                       }}
                     >
                       Đăng xuất
-                    </a>
+                    </button>
                   </li>
                 </>
               ) : (
