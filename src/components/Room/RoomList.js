@@ -90,7 +90,11 @@ const RoomList = () => {
   };
 
   const handleDeleteRoom = async (id) => {
-    await axios.delete(`http://10.32.5.48:8081/api/v1/rooms/${id}`);
+    await axios.delete(`http://10.32.5.48:8081/api/v1/rooms/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('apiToken')}`
+      }
+    })
     alert("Room deleted successfully!");
     fetchRooms();
   };

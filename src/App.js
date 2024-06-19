@@ -12,6 +12,7 @@ import Register from './components/User/Register';
 import Calendar from './components/Calendar/Calendar';
 import UserList from './components/User/UserList';
 import RoomList from './components/Room/RoomList';
+import DayOffList from './components/DayOff/DayOffList';
 import axios from 'axios';
 
 function App() {
@@ -84,6 +85,9 @@ function App() {
                         <Link to="/room/list">Room List</Link>
                       </li>
                       <li>
+                        <Link to="/dayoff/list">Day Off List</Link>
+                      </li>
+                      <li>
                         <button
                           onClick={handleExportBookingRoom}
                           style={{
@@ -140,9 +144,10 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/calendar" element={<Calendar />} />
             {currentUser && currentUser.isAdmin && (
-              <Route path="/users/manage" element={<UserList />} />
+                <Route path="/users/manage" element={<UserList />} />,
+                <Route path="/dayoff/list" element={<DayOffList />} />,
+                <Route path="/room/list" element={<RoomList />} />
             )}
-            <Route path="/room/list" element={<RoomList />} />
           </Routes>
         </header>
       </div>
