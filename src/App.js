@@ -1,26 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   BrowserRouter as Router,
   Route,
   Routes,
   Navigate,
   Link,
-} from 'react-router-dom';
-import './App.css';
-import Login from './components/User/Login';
-import Register from './components/User/Register';
-import Calendar from './components/Calendar/Calendar';
-import UserList from './components/User/UserList';
-import RoomList from './components/Room/RoomList';
-import DayOffList from './components/DayOff/DayOffList';
-import axios from 'axios';
+} from "react-router-dom";
+import "./App.css";
+import Login from "./components/User/Login";
+import Register from "./components/User/Register";
+import Calendar from "./components/Calendar/Calendar";
+import UserList from "./components/User/UserList";
+import RoomList from "./components/Room/RoomList";
+import DayOffList from "./components/DayOff/DayOffList";
+import axios from "axios";
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
 
   // Check if user is logged in on initial load
   React.useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem('currentUser'));
+    const storedUser = JSON.parse(localStorage.getItem("currentUser"));
     if (storedUser) {
       setCurrentUser(storedUser);
     }
@@ -28,37 +28,40 @@ function App() {
 
   const handleLogin = (user) => {
     setCurrentUser(user);
-    localStorage.setItem('currentUser', JSON.stringify(user));
-    localStorage.setItem('apiToken', user.apiToken);
+    localStorage.setItem("currentUser", JSON.stringify(user));
+    localStorage.setItem("apiToken", user.apiToken);
   };
 
   const handleLogout = () => {
     setCurrentUser(null);
-    localStorage.removeItem('apiToken');
-    localStorage.removeItem('currentUser');
+    localStorage.removeItem("apiToken");
+    localStorage.removeItem("currentUser");
     window.location.href = "/";
   };
 
   const handleExportBookingRoom = async () => {
-    const token = localStorage.getItem('apiToken');
+    const token = localStorage.getItem("apiToken");
     try {
-      const response = await axios.get('http://10.32.5.48:8081/api/v1/bookingroom/export', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        responseType: 'blob', // Important: responseType must be 'blob' for file download
-      });
-  
+      const response = await axios.get(
+        "http://10.32.5.48:8081/api/v1/bookingroom/export",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          responseType: "blob", // Important: responseType must be 'blob' for file download
+        }
+      );
+
       const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.setAttribute('download', 'booking_rooms.xlsx'); // File name here
+      link.setAttribute("download", "booking_rooms.xlsx"); // File name here
       document.body.appendChild(link);
       link.click();
       link.parentNode.removeChild(link);
     } catch (error) {
-      console.error('Error exporting booking rooms:', error);
-      alert('Failed to export booking rooms.');
+      console.error("Error exporting booking rooms:", error);
+      alert("Failed to export booking rooms.");
     }
   };
 
@@ -91,12 +94,12 @@ function App() {
                         <button
                           onClick={handleExportBookingRoom}
                           style={{
-                            cursor: 'pointer',
-                            color: 'blue',
-                            background: 'none',
-                            border: 'none',
+                            cursor: "pointer",
+                            color: "blue",
+                            background: "none",
+                            border: "none",
                             padding: 0,
-                            font: 'inherit',
+                            font: "inherit",
                           }}
                         >
                           Export Excel
@@ -108,13 +111,13 @@ function App() {
                     <button
                       onClick={handleLogout}
                       style={{
-                        cursor: 'pointer',
-                        color: 'blue',
+                        cursor: "pointer",
+                        color: "blue",
                         marginLeft: 10,
-                        background: 'none',
-                        border: 'none',
+                        background: "none",
+                        border: "none",
                         padding: 0,
-                        font: 'inherit',
+                        font: "inherit",
                       }}
                     >
                       Đăng xuất
@@ -122,7 +125,7 @@ function App() {
                   </li>
                 </>
               ) : (
-                <> 
+                <>
                   <li>
                     <Link to="/register">Register</Link>
                   </li>
@@ -144,9 +147,11 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/calendar" element={<Calendar />} />
             {currentUser && currentUser.isAdmin && (
-                <Route path="/users/manage" element={<UserList />} />,
-                <Route path="/dayoff/list" element={<DayOffList />} />,
+              <>
+                <Route path="/users/manage" element={<UserList />} />
+                <Route path="/dayoff/list" element={<DayOffList />} />
                 <Route path="/room/list" element={<RoomList />} />
+              </>
             )}
           </Routes>
         </header>
