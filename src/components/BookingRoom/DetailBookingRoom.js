@@ -13,6 +13,8 @@ const DetailBookingRoom = ({ isOpen, onClose, selectedEvent }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [canEditOrDelete, setCanEditOrDelete] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const [userName, setUserName] = useState("");
+  const [roomName, setRoomName] = useState("");
 
   const checkCanEditOrDelete = useCallback(() => {
     if (
@@ -40,10 +42,19 @@ const DetailBookingRoom = ({ isOpen, onClose, selectedEvent }) => {
     checkCanEditOrDelete();
   }, [currentUser, roomDetail, checkCanEditOrDelete]);
 
+  useEffect(() => {
+    if (roomDetail.userId) {
+      fetchUserName(roomDetail.userId);
+    }
+    if (roomDetail.roomId) {
+      fetchRoomName(roomDetail.roomId);
+    }
+  }, [roomDetail.userId, roomDetail.roomId]);
+
   const fetchRoomDetail = async (id) => {
     try {
       const response = await axios.get(
-        `http://10.32.5.48:8081/api/v1/bookingroom/${id}`
+        `http://localhost:8081/api/v1/bookingroom/${id}`
       );
       setRoomDetail(response.data);
     } catch (error) {
@@ -55,7 +66,7 @@ const DetailBookingRoom = ({ isOpen, onClose, selectedEvent }) => {
   const handleDeleteBooking = async () => {
     try {
       await axios.delete(
-        `http://10.32.5.48:8081/api/v1/bookingroom/${selectedEvent.id}`
+        `http://localhost:8081/api/v1/bookingroom/${selectedEvent.id}`
       );
       alert("Booking deleted successfully!");
       onClose();
@@ -78,6 +89,40 @@ const DetailBookingRoom = ({ isOpen, onClose, selectedEvent }) => {
     setRoomDetail(updatedBooking);
   };
 
+  const fetchUserName = async (userId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8081/api/v1/users/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("apiToken")}`,
+          },
+        }
+      );
+      setUserName(response.data.userName);
+    } catch (error) {
+      console.error("Error fetching user name:", error);
+      setBookingMessage("Failed to fetch user name.");
+    }
+  };
+
+  const fetchRoomName = async (roomId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8081/api/v1/rooms/${roomId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("apiToken")}`,
+          },
+        }
+      );
+      setRoomName(response.data.name);
+    } catch (error) {
+      console.error("Error fetching room name:", error);
+      setBookingMessage("Failed to fetch room name.");
+    }
+  };
+
   return (
     <Modal
       isOpen={isOpen}
@@ -85,8 +130,16 @@ const DetailBookingRoom = ({ isOpen, onClose, selectedEvent }) => {
       overlayClassName="modal-overlay"
       className="modal-content bg-white"
     >
-      <div className="modal-header">
-        <h2 className="modal-title">Booking Detail</h2>
+      <div
+        className="modal-header"
+        style={{ backgroundColor: roomDetail.color }}
+      >
+        <h2
+          className="modal-title"
+          style={{ color: "white", marginLeft: "10px" }}
+        >
+          Booking Detail
+        </h2>
         <div style={{ width: "30%" }}>
           {canEditOrDelete && (
             <>
@@ -113,10 +166,10 @@ const DetailBookingRoom = ({ isOpen, onClose, selectedEvent }) => {
         {selectedEvent ? (
           <div>
             <p>
-              <strong>User ID:</strong> {roomDetail.userId}
+              <strong>User Name:</strong> {userName}
             </p>
             <p>
-              <strong>Room ID:</strong> {roomDetail.roomId}
+              <strong>Room Name:</strong> {roomName}
             </p>
             <p>
               <strong>Description:</strong> {roomDetail.description}

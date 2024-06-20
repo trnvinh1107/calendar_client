@@ -7,7 +7,7 @@ import EditDayOff from "./EditDayOff";
 import AddDayOff from "./AddDayOff";
 
 const DayOffList = () => {
-  const [dayOff, setDayOff] = useState([]);
+  const [dayOffs, setDayOffs] = useState([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedDayOff, setSelectedDayOff] = useState(null);
@@ -19,7 +19,7 @@ const DayOffList = () => {
   const fetchDayOff = async () => {
     const token = localStorage.getItem("apiToken");
     try {
-      const response = await fetch("http://10.32.5.48:8081/api/v1/dayoff", {
+      const response = await fetch("http://localhost:8081/api/v1/dayoff/admin", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -27,7 +27,7 @@ const DayOffList = () => {
       if (response.ok) {
         const data = await response.json();
 
-        setDayOff(data);
+        setDayOffs(data);
       }
     } catch (error) {
       console.error("Error fetching dayOff:", error);
@@ -35,18 +35,18 @@ const DayOffList = () => {
   };
 
   const handleDayOffChange = (dayOff) => {
-    const updatedDayOff = dayOff.map((r) => {
+    const updatedDayOffs = dayOffs.map((r) => {
       if (r.id === dayOff.id) {
         return { ...r, isActivity: !r.isActivity };
       }
       return r;
     });
 
-    setDayOff(updatedDayOff);
-
+    setDayOffs(updatedDayOffs);
+    console.log(localStorage.getItem("apiToken"));
     axios
       .put(
-        `http://10.32.5.48:8081/api/v1/dayOff/${dayOff.id}`,
+        `http://localhost:8081/api/v1/dayoff/${dayOff.id}`,
         {
           ...dayOff,
           isActivity: !dayOff.isActivity,
@@ -65,7 +65,7 @@ const DayOffList = () => {
           "Error updating Day Off status:",
           error.response.data.error
         );
-        setDayOff(dayOff);
+        setDayOffs(dayOffs);
       });
   };
 
@@ -88,16 +88,20 @@ const DayOffList = () => {
   };
 
   const handleUpdateDayOff = (updatedDayOff) => {
-    const updatedDayOffs = dayOff.map((r) =>
+    const updatedDayOffs = dayOffs.map((r) =>
       r.id === updatedDayOff.id ? updatedDayOff : r
     );
-    setDayOff(updatedDayOffs);
+    setDayOffs(updatedDayOffs);
     setIsEditModalOpen(false);
     setSelectedDayOff(null);
   };
 
   const handleDeleteDayOff = async (id) => {
-    await axios.delete(`http://10.32.5.48:8081/api/v1/dayOff/${id}`);
+    await axios.delete(`http://localhost:8081/api/v1/dayoff/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("apiToken")}`,
+      },
+    });
     alert("dayOff deleted successfully!");
     fetchDayOff();
   };
@@ -123,7 +127,7 @@ const DayOffList = () => {
           </tr>
         </thead>
         <tbody>
-          {dayOff.map((dayOff) => (
+          {dayOffs.map((dayOff) => (
             <tr key={dayOff.id}>
               <td>{dayOff.id}</td>
               <td>{dayOff.name}</td>

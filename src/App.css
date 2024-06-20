@@ -309,3 +309,13 @@ input:checked + .slider:before {
   font-size: 22px;
   height: 50px;
 } */
+
+/* .day-off {
+  background-color: red !important;
+  pointer-events: none;
+}
+
+.booking-room {
+ background-color: green !important;
+  color: white !important;
+} */

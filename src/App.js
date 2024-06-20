@@ -32,7 +32,14 @@ function App() {
     localStorage.setItem("apiToken", user.apiToken);
   };
 
-  const handleLogout = () => {
+  const handleLogout = (user) => {
+    user = localStorage.getItem("currentUser");
+    user = JSON.parse(user);
+    axios.post("http://localhost:8081/api/v1/users/logout/" + user.userId, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('apiToken')}`
+      }
+    });
     setCurrentUser(null);
     localStorage.removeItem("apiToken");
     localStorage.removeItem("currentUser");
@@ -43,7 +50,7 @@ function App() {
     const token = localStorage.getItem("apiToken");
     try {
       const response = await axios.get(
-        "http://10.32.5.48:8081/api/v1/bookingroom/export",
+        "http://localhost:8081/api/v1/bookingroom/export",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -144,8 +151,14 @@ function App() {
                 )
               }
             />
+            <Route path="/calendar"
+             element={
+              !currentUser ? (
+                <Login onLogin={handleLogin} />
+              ) : (
+                <Calendar />
+              )}/>
             <Route path="/register" element={<Register />} />
-            <Route path="/calendar" element={<Calendar />} />
             {currentUser && currentUser.isAdmin && (
               <>
                 <Route path="/users/manage" element={<UserList />} />

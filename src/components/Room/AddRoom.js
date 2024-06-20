@@ -22,7 +22,7 @@ const AddRoom = ({ isOpen, onClose }) => {
     }
 
     try {
-      await axios.post("http://10.32.5.48:8081/api/v1/rooms", {
+      await axios.post("http://localhost:8081/api/v1/rooms", {
         name,
         capacity: parseInt(capacity),
         description,

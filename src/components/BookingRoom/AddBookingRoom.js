@@ -23,7 +23,7 @@ const AddBookingRoom = ({ isOpen, onClose, selectedDate }) => {
 
   const fetchRooms = async () => {
     try {
-      const response = await axios.get("http://10.32.5.48:8081/api/v1/rooms");
+      const response = await axios.get("http://localhost:8081/api/v1/rooms");
       setRooms(response.data);
     } catch (error) {
       console.error("Error fetching rooms:", error);
@@ -55,7 +55,7 @@ const AddBookingRoom = ({ isOpen, onClose, selectedDate }) => {
 
     try {
       const checkConflictResponse = await axios.get(
-        `http://10.32.5.48:8081/api/v1/bookingroom/check`,
+        `http://localhost:8081/api/v1/bookingroom/check`,
         {
           params: {
             roomId: selectedRoom,
@@ -72,7 +72,7 @@ const AddBookingRoom = ({ isOpen, onClose, selectedDate }) => {
         return;
       }
 
-      await axios.post("http://10.32.5.48:8081/api/v1/bookingroom", {
+      await axios.post("http://localhost:8081/api/v1/bookingroom", {
         userId: currentUser.userId,
         roomId: selectedRoom,
         startTime: formattedStartTime,

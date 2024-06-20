@@ -13,6 +13,7 @@ const EditBookingRoom = ({ isOpen, onClose, bookingData, onUpdate }) => {
     startTime: bookingData.startTime,
     endTime: bookingData.endTime,
     description: bookingData.description,
+    color: bookingData.color,
   });
 
   const [errorMessage, setErrorMessage] = useState('');
@@ -25,6 +26,7 @@ const EditBookingRoom = ({ isOpen, onClose, bookingData, onUpdate }) => {
       startTime: bookingData.startTime,
       endTime: bookingData.endTime,
       description: bookingData.description,
+      color: bookingData.color,
     });
     setErrorMessage('');
   }, [bookingData]);
@@ -49,7 +51,7 @@ const EditBookingRoom = ({ isOpen, onClose, bookingData, onUpdate }) => {
 
     try {
       // Check conflict
-      const checkConflictResponse = await axios.get('http://10.32.5.48:8081/api/v1/bookingroom/check', {
+      const checkConflictResponse = await axios.get('http://localhost:8081/api/v1/bookingroom/check', {
         params: {
           roomId: roomId,
           startTime: formattedStartTime,
@@ -66,7 +68,7 @@ const EditBookingRoom = ({ isOpen, onClose, bookingData, onUpdate }) => {
       }
 
       // Update booking
-      await axios.put(`http://10.32.5.48:8081/api/v1/bookingroom/${id}`, formData);
+      await axios.put(`http://localhost:8081/api/v1/bookingroom/${id}`, formData);
       onUpdate(formData);
       onClose();
       alert('Cập nhật thành công!');
@@ -146,8 +148,24 @@ const EditBookingRoom = ({ isOpen, onClose, bookingData, onUpdate }) => {
               className="form-control"
             />
           </div>
+          <div className="form-group">
+            <label htmlFor="color">Color:</label>
+            <select
+              id="color"
+              name="color"
+              value={formData.color}
+              onChange={handleChange}
+              className="form-control"
+              style={{width: '201px'}}
+            >
+              <option value="#4285F4">Blue</option>
+              <option value="#34A853">Green</option>
+              <option value="#EA4335">Red</option>
+              <option value="#FBBC05">Yellow</option>
+            </select>
+          </div>
           {errorMessage && <p className="text-danger">{errorMessage}</p>}
-          <div className="modal-footer">
+          <div className="modal-footer" style={{marginTop:"10px"}}>
             <button type="button" className="btn btn-secondary" onClick={onClose}>
               Close
             </button>

@@ -33,7 +33,7 @@ const EditDayOff = ({ isOpen, onClose, dayOff, onUpdate }) => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `http://10.32.5.48:8081/api/v1/dayoff/${dayOff.id}`,
+        `http://localhost:8081/api/v1/dayoff/${dayOff.id}`,
         formData,
         {
           headers: {
