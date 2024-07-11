@@ -14,7 +14,7 @@ const AddBookingRoom = ({ isOpen, onClose, selectedDate }) => {
   const [description, setDescription] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-
+  const [color, setColor] = useState("");
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
   useEffect(() => {
@@ -79,7 +79,7 @@ const AddBookingRoom = ({ isOpen, onClose, selectedDate }) => {
         startTime: formattedStartTime,
         endTime: formattedEndTime,
         description: description,
-        color:"#4285F4",
+        color:color || "#4285F4",
       });
 
       alert("Đặt phòng thành công!");
@@ -131,6 +131,21 @@ const AddBookingRoom = ({ isOpen, onClose, selectedDate }) => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
+          </div>
+          <div className="color">
+            <label htmlFor="color">Color:</label>
+            <select
+              id="color"
+              className="color-select"
+              value={color}
+              onChange={(e) => setColor(e.target.value)} 
+              style={{ width: "201px" }}
+            >
+              <option value="#4285F4">Blue</option>
+              <option value="#34A853">Green</option>
+              <option value="#EA4335">Red</option>
+              <option value="#FBBC05">Yellow</option>
+            </select>
           </div>
           <div className="time">
             <label>Thời gian bắt đầu:</label>
