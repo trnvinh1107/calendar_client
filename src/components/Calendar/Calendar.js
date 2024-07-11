@@ -89,24 +89,25 @@ function Calendar() {
     currentDate.setHours(0, 0, 0, 0);
 
     const dayOff = dayOffs.find((dayOff) => {
+      // dayOff.start = arg.dateStr;
       const dayOffDate = new Date(dayOff.start);
       dayOffDate.setHours(7, 0, 0, 0);
       console.log(dayOffDate + " abc " + clickedDate);
       return (
         dayOffDate.getDate() === clickedDate.getDate() &&
-        dayOffDate.getHours() === clickedDate.getHours()
+        dayOffDate.getMonth() === clickedDate.getMonth()
       );
     });
-    // console.log("dayoff " + JSON.stringify(dayOff));
-    if (clickedDate < currentDate) {
-      alert("Không được chọn ngày của quá khứ.");
-    } else if (dayOff) {
+    console.log("dayoff " + JSON.stringify(dayOff));
+    if (dayOff) {
       alert(
         "Không được đặt phòng vào ngày nghỉ.\nNgày " +
           dayOff.name +
           " là ngày: " +
           dayOff.description
       );
+    } else if (clickedDate < currentDate) {
+      alert("Không được chọn ngày của quá khứ.");
     } else {
       setSelectedDate(arg.dateStr);
       setModalAddIsOpen(true);
@@ -136,7 +137,11 @@ function Calendar() {
       return (
         <div
           className="day-off"
-          style={{ backgroundColor: "red", pointerEvents: "none", height: "100%" }}
+          style={{
+            backgroundColor: "red",
+            pointerEvents: "none",
+            height: "100%",
+          }}
         >
           <span style={{ color: "#ccc" }}>{event.title}</span>
         </div>
@@ -145,7 +150,10 @@ function Calendar() {
       return (
         <div
           className="booking-room"
-          style={{ backgroundColor: event.backgroundColor || "blue" , width: "100%"}}
+          style={{
+            backgroundColor: event.backgroundColor || "blue",
+            width: "100%",
+          }}
         >
           <b style={{ color: "#fff" }}>{event.title}</b>
         </div>

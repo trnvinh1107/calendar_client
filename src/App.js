@@ -37,16 +37,15 @@ function App() {
     user = JSON.parse(user);
     axios.post("http://localhost:8081/api/v1/users/logout/" + user.userId, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('apiToken')}`
-      }
+        Authorization: `Bearer ${localStorage.getItem("apiToken")}`,
+      },
     });
     setCurrentUser(null);
     localStorage.removeItem("apiToken");
     localStorage.removeItem("currentUser");
     window.location.href = "/";
   };
-
-  const handleExportBookingRoom = async () => {
+  const handleExportExcel = async () => {
     const token = localStorage.getItem("apiToken");
     try {
       const response = await axios.get(
@@ -69,6 +68,27 @@ function App() {
     } catch (error) {
       console.error("Error exporting booking rooms:", error);
       alert("Failed to export booking rooms.");
+    }
+  };
+  const handleExportPdf = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8081/api/v1/bookingroom/export/pdf",
+        {
+          responseType: "blob", // Important: responseType must be 'blob' for file download
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "booking_rooms.pdf"); // File name here
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error("Error exporting booking rooms as PDF:", error);
+      alert("Failed to export booking rooms as PDF.");
     }
   };
 
@@ -98,19 +118,19 @@ function App() {
                         <Link to="/dayoff/list">Day Off List</Link>
                       </li>
                       <li>
-                        <button
-                          onClick={handleExportBookingRoom}
-                          style={{
-                            cursor: "pointer",
-                            color: "blue",
-                            background: "none",
-                            border: "none",
-                            padding: 0,
-                            font: "inherit",
-                          }}
-                        >
-                          Export Excel
-                        </button>
+                        <div className="export-dropdown">
+                          <Link>
+                            Export
+                          </Link>
+                          <div className="export-dropdown-content">
+                            <button className="buttonExport" onClick={handleExportExcel}>
+                              Excel
+                            </button>
+                            <button className="buttonExport" onClick={handleExportPdf}>
+                              PDF
+                            </button>
+                          </div>
+                        </div>
                       </li>
                     </>
                   )}
@@ -151,13 +171,12 @@ function App() {
                 )
               }
             />
-            <Route path="/calendar"
-             element={
-              !currentUser ? (
-                <Login onLogin={handleLogin} />
-              ) : (
-                <Calendar />
-              )}/>
+            <Route
+              path="/calendar"
+              element={
+                !currentUser ? <Login onLogin={handleLogin} /> : <Calendar />
+              }
+            />
             <Route path="/register" element={<Register />} />
             {currentUser && currentUser.isAdmin && (
               <>

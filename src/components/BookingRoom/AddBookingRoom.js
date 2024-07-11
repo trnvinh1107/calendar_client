@@ -61,6 +61,7 @@ const AddBookingRoom = ({ isOpen, onClose, selectedDate }) => {
             roomId: selectedRoom,
             startTime: formattedStartTime,
             endTime: formattedEndTime,
+            exceptedId: -1,
           },
         }
       );
@@ -78,6 +79,7 @@ const AddBookingRoom = ({ isOpen, onClose, selectedDate }) => {
         startTime: formattedStartTime,
         endTime: formattedEndTime,
         description: description,
+        color:"#4285F4",
       });
 
       alert("Đặt phòng thành công!");

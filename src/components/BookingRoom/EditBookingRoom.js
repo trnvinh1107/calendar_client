@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Modal from 'react-modal';
-import { DateTime } from 'luxon';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Modal from "react-modal";
+import { DateTime } from "luxon";
 
-Modal.setAppElement('#root');
+Modal.setAppElement("#root");
 
 const EditBookingRoom = ({ isOpen, onClose, bookingData, onUpdate }) => {
   const [formData, setFormData] = useState({
@@ -16,7 +16,7 @@ const EditBookingRoom = ({ isOpen, onClose, bookingData, onUpdate }) => {
     color: bookingData.color,
   });
 
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     setFormData({
@@ -28,7 +28,7 @@ const EditBookingRoom = ({ isOpen, onClose, bookingData, onUpdate }) => {
       description: bookingData.description,
       color: bookingData.color,
     });
-    setErrorMessage('');
+    setErrorMessage("");
   }, [bookingData]);
 
   const handleChange = (e) => {
@@ -41,41 +41,52 @@ const EditBookingRoom = ({ isOpen, onClose, bookingData, onUpdate }) => {
     const { id, roomId, startTime, endTime } = formData;
 
     // Validate time
-    const formattedStartTime = DateTime.fromISO(startTime).toFormat("yyyy-MM-dd'T'HH:mm:ss");
-    const formattedEndTime = DateTime.fromISO(endTime).toFormat("yyyy-MM-dd'T'HH:mm:ss");
+    const formattedStartTime = DateTime.fromISO(startTime).toFormat(
+      "yyyy-MM-dd'T'HH:mm:ss"
+    );
+    const formattedEndTime = DateTime.fromISO(endTime).toFormat(
+      "yyyy-MM-dd'T'HH:mm:ss"
+    );
 
     if (formattedEndTime <= formattedStartTime) {
-      setErrorMessage('Thời gian kết thúc phải sau thời gian bắt đầu.');
+      setErrorMessage("Thời gian kết thúc phải sau thời gian bắt đầu.");
       return;
     }
 
     try {
       // Check conflict
-      const checkConflictResponse = await axios.get('http://localhost:8081/api/v1/bookingroom/check', {
-        params: {
-          roomId: roomId,
-          startTime: formattedStartTime,
-          endTime: formattedEndTime,
-        },
-      });
+      const checkConflictResponse = await axios.get(
+        "http://localhost:8081/api/v1/bookingroom/check",
+        {
+          params: {
+            roomId: roomId,
+            startTime: formattedStartTime,
+            endTime: formattedEndTime,
+            exceptedId: id,
+          },
+        }
+      );
       console.log("abc: " + roomId);
       console.log("def: " + formData.roomId);
-      if(formData.roomId !== roomId){
-        if (checkConflictResponse.data.conflict) {
-          setErrorMessage('Phòng này đã có người đặt trước trong thời gian bạn chọn.');
-          return;
-        }
+      if (checkConflictResponse.data.conflict) {
+        setErrorMessage(
+          "Phòng này đã có người đặt trước trong thời gian bạn chọn."
+        );
+        return;
       }
 
       // Update booking
-      await axios.put(`http://localhost:8081/api/v1/bookingroom/${id}`, formData);
+      await axios.put(
+        `http://localhost:8081/api/v1/bookingroom/${id}`,
+        formData
+      );
       onUpdate(formData);
       onClose();
-      alert('Cập nhật thành công!');
+      alert("Cập nhật thành công!");
       window.location.reload();
     } catch (error) {
-      console.error('Error updating booking room:', error);
-      setErrorMessage('Cập nhật phòng không thành công.');
+      console.error("Error updating booking room:", error);
+      setErrorMessage("Cập nhật phòng không thành công.");
     }
   };
 
@@ -111,7 +122,7 @@ const EditBookingRoom = ({ isOpen, onClose, bookingData, onUpdate }) => {
               type="text"
               id="roomId"
               name="roomId"
-              value={formData.roomId}  
+              value={formData.roomId}
               onChange={handleChange}
               className="form-control"
             />
@@ -156,7 +167,7 @@ const EditBookingRoom = ({ isOpen, onClose, bookingData, onUpdate }) => {
               value={formData.color}
               onChange={handleChange}
               className="form-control"
-              style={{width: '201px'}}
+              style={{ width: "201px" }}
             >
               <option value="#4285F4">Blue</option>
               <option value="#34A853">Green</option>
@@ -165,8 +176,12 @@ const EditBookingRoom = ({ isOpen, onClose, bookingData, onUpdate }) => {
             </select>
           </div>
           {errorMessage && <p className="text-danger">{errorMessage}</p>}
-          <div className="modal-footer" style={{marginTop:"10px"}}>
-            <button type="button" className="btn btn-secondary" onClick={onClose}>
+          <div className="modal-footer" style={{ marginTop: "10px" }}>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={onClose}
+            >
               Close
             </button>
             <button type="submit" className="btn btn-primary">

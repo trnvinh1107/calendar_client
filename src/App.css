@@ -59,7 +59,9 @@ button {
   font-size: 1em;
   cursor: pointer;
 }
-
+button:hover{
+  opacity:0.8;
+}
 label {
   margin-bottom: 0.5em;
   font-size: 1.2em;
@@ -319,3 +321,39 @@ input:checked + .slider:before {
  background-color: green !important;
   color: white !important;
 } */
+ /* Add this to your App.css or relevant CSS file */
+.export-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.export-dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.export-dropdown-content button {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+}
+
+/* .export-dropdown-content button:hover {
+  background-color: #fc0606;
+} */
+
+.export-dropdown:hover .export-dropdown-content {
+  display: block;
+  z-index: 2;
+}
+
+.export-dropdown:hover button {
+  background-color: #4285f4;
+}
